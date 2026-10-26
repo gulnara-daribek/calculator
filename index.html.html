@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Энергия года / Жыл энергиясы</title>
+        <style>
+          /* ========================================================
+           🌌 ПАЛИТРА «КОСМИЧЕСКИЙ ФИОЛЕТОВЫЙ» И СИЯЮЩЕЕ ЗОЛОТО
+           ======================================================== */
+        :root {
+            /* Глубокий космический фиолетовый градиент для фона страницы */
+            --bg-color: radial-gradient(circle at center, #25123e 0%, #0f051d 70%, #05010a 100%); 
+            --card-bg: rgba(25, 14, 43, 0.8);  /* Полупрозрачный фиолетовый фон калькулятора */
+            --text-color: #ffffff;             /* Белый текст */
+            --text-muted: #bda8d9;             /* Мягкий лавандовый для подписей */
+            --border-color: #43286b;           /* Насыщенные фиолетовые рамки */
+            
+            /* Эффект объемного сияющего золота */
+            --gold-gradient: linear-gradient(135deg, #f5e9c9 0%, #d4af37 40%, #aa7c11 100%);
+            --gold-solid: #d4af37;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background: var(--bg-color);
+            background-attachment: fixed;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(15px); /* Эффект матового стекла */
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 35px 25px 25px 25px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(138, 43, 226, 0.15);
+            position: relative;
+        }
+        
+        /* Исправление смещения кнопок и заголовков */
+        .lang-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 6px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .lang-btn.active {
+            background: var(--gold-gradient);
+            color: #000000;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Выравнивание по центру */
+        h1 {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .method-subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 0px;
+            margin-bottom: 30px;
+            font-style: italic;
+            display: block;
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e2d5f3;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            background-color: rgba(12, 5, 23, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-color);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        input:focus {
+            border-color: var(--gold-solid);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+            background-color: rgba(12, 5, 23, 0.8);
+        }
+        
+        /* Золотая сияющая кнопка */
+        button.btn-calc {
+            width: 100%;
+            padding: 16px;
+            background: var(--gold-gradient);
+            color: #000000;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+        }
+        button.btn-calc:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(212, 175, 55, 0.2);
+        }
+
+        .result-box {
+            margin-top: 30px;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 25px;
+            display: none;
+        }
+        
+        /* Золотые сияющие цифры */
+        .energy-num {
+            font-size: 58px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.3));
+        }
+        .energy-title {
+            font-size: 19px;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            padding: 0 10px;
+        }
+        .energy-desc {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #f1ebf7;
+            text-align: justify;
+            margin-bottom: 25px;
+        }
+        .cta-box {
+            background: linear-gradient(180deg, rgba(20, 10, 35, 0.8) 0%, rgba(10, 5, 20, 0.9) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px;
+            text-align: center;
+        }
+        .cta-text {
+            font-size: 14px;
+            color: #e2d5f3;
+            margin-bottom: 18px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        .btn-telegram {
+            display: inline-block;
+            background-color: #24A1DE;
+            color: white;
+            padding: 13px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 12px rgba(36, 161, 222, 0.3);
+        }
+        .btn-telegram:hover {
+            background-color: #1e82b3;
+        }
+        .error-msg {
+            color: #ff453a;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLanguage('ru')">RU</button>
+        <button class="lang-btn" onclick="setLanguage('kz')">KZ</button>
+    </div>
+    <h1 id="main-title">Энергия года</h1>
+    <div id="method-text" style="text-align: center; font-size: 13px; color: var(--text-muted); margin-top: -15px; margin-bottom: 25px; font-style: italic;">Расчет по солярному методу</div>
+    <div class="input-group">
+        <label id="lbl-date" for="birthdate">Введите дату рождения:</label>
+        <input type="date" id="birthdate" required>
+    </div>
+    <div class="input-group">
+        <label id="lbl-year" for="targetyear">Введите интересующий год:</label>
+        <input type="number" id="targetyear" min="1000" max="3000" placeholder="Например, 2027">
+        <div class="error-msg" id="error-text"></div>
+    </div>
+    <button class="btn-calc" id="btn-submit" onclick="calculateEnergy()">Рассчитать</button>
+    
+    <div class="result-box" id="result">
+        <div class="energy-num" id="res-num">0</div>
+        <div class="energy-title" id="res-title">Название энергии</div>
+        <div class="energy-desc" id="res-desc">Описание...</div>
+        <div class="cta-box">
+            <div class="cta-text" id="res-cta"></div> 
+            <a href="https://t.me/Gulnarabook_bot?start=65acabe63984043e55098cac" class="btn-telegram" id="res-bot-link" target="_blank">Перейти в Telegram</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const i18n = {
+        ru: {
+            title: "Энергия года",
+            method: "Расчет по солярному методу", // <-- ДОБАВИЛИ СЮДА
+            lblDate: "Введите дату рождения:",
+            lblYear: "Введите интересующий год:",
+            btnSubmit: "Рассчитать",
+            errorEmpty: "Пожалуйста, заполните все поля корректно.",
+            botText: "Перейти в Telegram",
+            botUrl: "https://t.me/Gulnarabook_bot?start=65acabe63984043e55098cac"
+        },
+        kz: {
+            title: "Жыл энергиясы",
+            method: "Солярлық әдіс бойынша есептеу", // <-- ДОБАВИЛИ СЮДА (на казахском)
+            lblDate: "Туған күніңізді енгізіңіз:",
+            lblYear: "Қызықтырған жылды енгізіңіз:",
+            btnSubmit: "Есептеу",
+            errorEmpty: "Барлық өрістерді дұрыс толтырыңыз.",
+            botText: "Telegram-ға өту",
+            botUrl: "https://t.me/Gulnarakitap_bot?start=65acb77a033cc9a93d0bf786"
+        }
+    };
+
+    const interpretations = {
+        ru: {
+            1: { 
+                title: "Энергия Нового начала и Лидерства", 
+                desc: "Этот год принесет вам мощный импульс для старта. Время проявлять инициативу, открывать новые проекты и брать ответственность на себя. Не бойтесь одиночества в решениях — вы ведете за собой. В этом году вы закладываете фундамент. От того как проведете этот год, зависят следующие 8 лет вашей жизни.", 
+                cta: "Забрать техники для взрывного роста и привлечения клиентов в моем боте" 
+            },
+            2: { 
+                title: "Энергия Партнерства и Дипломатии", 
+                desc: "Год гармонии, выстраивания связей и союзов. Успех придет через сотрудничество, умение слушать и договариваться. Идеальное время для укрепления личных отношений и командной работы. Также это благоприятный год для встречи второй половинки, либо для перехода на новый уровень уже существующих отношений.", 
+                cta: "Забрать ментальные практики для закрытия долгов и кредитов в моем боте" 
+            },
+            3: { 
+                title: "Энергия Творчества и Изобилия", 
+                desc: "Период расцвета, плодородия и реализации творческих идей. Для женщин — рост женственности и возможная беременность, для мужчин — поддержка со стороны женщин и успех в бизнесе.Год творчества, креатива и самовыражения. Благоприятный год для обучения, путешествий. Можно расширять бизнес, менять профессию. Год радости.Любые изменения в этот год несут большие траты энергии, так что не старайтесь прыгнуть выше головы и не давайте пустых обещаний.", 
+                cta: "Забрать техники для взрывного роста и привлечения клиентов в моем боте" 
+            },
+            4: { 
+                title: "Энергия Стабильности, структуры и Власти", 
+                desc: "Год порядка, стабильности и укрепления позиций. Время строить карьеру, наводить порядок в финансах и бизнесе. Потребуется дисциплина, твердость и стратегический подход. Это своего рода проверка на прочность. Любые другие изменения в этот год: переезд, развод, смена профессии не желательны. Можно покупать жилье (недвижимость), браки заключенные в этот год стабильны.", 
+                cta: "Активировать практики для крупных продаж авто и недвижимости прямо сейчас в боте" 
+            },
+            5: { 
+                title: "Энергия Обучения и Перемен",desc: "Год духовного или интеллектуального поиска. Прекрасное время для получения новых знаний, путешествий, смены мировоззрения или передачи опыта другим людям. Отнеситесь к переменам более спокойно. Все что ни делается, все к лучшему.",
+cta: "Забрать техники для взрывного роста и привлечения клиентов в моем боте"
+},
+6: {
+title: "Энергия Выбора и Любви",
+desc: "Вам предстоит принимать важные решения сердцем. Год наполнен вопросами отношений, красоты и уюта. Главный урок года — научиться любить себя и делать выбор без сомнений. Идеальный год для изменений в личной жизни: замужество, женитьба, зачатие, рождение ребенка, либо желанный развод. Семейные конфликты могут хорошо разрешаться. Если открывать бизнес в этот год, то желательно семейный.",
+cta: "Забрать практики для гармонии и исполнения желаний в моем боте"
+},
+7: {
+title: "Энергия Духовного кризиса и... Трансформации",
+desc: "Год духовного кризиса, познания себя, самоанализа. Вам захочется уединения. В этот год нужно тщательно продумывать каждый шаг и не принимать импульсивных решений. Возможны расставания. Не грустите, уходят лишь те, кто мешает вам развиваться и идти вперед. Произойдет внутренняя трансформация, и как следствие — изменения в жизни. Год хорош для новых знаний, обретения ремесла, творчества.",
+cta: "Забрать ментальные практики для закрытия долгов и кредитов в моем боте"
+},
+8: {
+title: "Энергия Справедливости и Кармы",
+desc: "Время пожинать плоды прошлых действий. Всё, что происходит в этом году — следствие ваших ранних решений. Хороший период для изучения законов, причинно-следственных связей и работы с юридическими документами. Год проверки на честность, порядочность. Если пройдете проверку, то получите бонус: удачу в делах. Год благоприятен для инвестирования и покупки жилья, а любая неожиданная прибыль в этот год — это проверка, необходимо делиться (помогать нуждающимся, благотворительность и т.п.). Для свободных людей — шанс устроить личную жизнь.",
+cta: "Активировать практики для крупных продаж авто и недвижимости прямо сейчас в боте"
+},
+9: {
+title: "Энергия Мудрости и Завершения",
+desc: "Год глубокого самопознания и подведения итогов. Время, когда полезно замедлиться, побыть наедине со своими мыслями, заняться глубоким анализом жизни или научными исследованиями. Важно не цепляться за прошлое и завершать начатые и незавершенные дела (ремонт и т.п.). Долги желательно вернуть, кредиты закрыть. Иначе все незавершенные дела могут затянуться на следующие 8 лет. Этот год разрушает слабые отношения, возможен развод. Неуспешные бизнес-проекты имеют шанс развалиться.",
+cta: "Забрать ментальные практики для закрытия долгов и кредитов в моем боте"
+}
+},
+kz: {
+1: { title: "Жаңа бастама мен Көшбасшылық энергиясы", desc: "Бұл жыл сізге жаңа бастамалар үшін қуатты серпін әкеледі. Бастама көтеріп, жаңа жобаларды ашу және жауапкершілікті өз мойныңызға алу уақыты. Осы жылы сіз іргетас қалайсыз. Осы жылды қалай өткізетініңізге өміріңіздің келесі 8 жылы байланысты.", cta: "Телеграм ботта ақша шақыру мен клиенттерді тарту әдістерін алыңыз" },
+2: { title: "Серіктестік пен Дипломатия энергиясы", desc: "Үйлесімділік, байланыстар мен одақтар құру жылы. Табыс, ынтымақтастық, тыңдай білу және келіссөздер жүргізе алу арқылы келеді. Жеке қарым-қатынастарды нығайту уақыты. Екінші жартыңызды жолықтыруға немесе қарым-қатынасты жаңа деңгейге көтеруге қолайлы жыл.", cta: "Телеграм ботта қарыздарды жабуға арналған практикаларды алыңыз" },
+3: { title: "Шығармашылық пен Молшылық энергиясы", desc: "Гүлдену, құнарлылық және шығармашылық идеяларды жүзеге асыру кезеңі. Әйелдер үшін — нәзіктіктің артуы және  жүктілік болуы мүмкін, ерлер үшін — әйелдер тарапынан қолдау және бизнестегі табыс.", cta: "Ботта өсу мен клиенттерді тарту әдістерін алыңыз" },
+4: { title: "Тұрақтылық мен Билік энергиясы", desc: "Тәртіп, тұрақтылық және позицияларды нығайту жылы. Мансап құру, қаржы мен бизнесте тәртіп орнату уақыты. Көшіп-қону, ажырасу, жұмысты ауыстыру ұсынылмайды. Тұрғын үй сатып алуға болады, осы жылы құрылған некелер тұрақты болады.", cta: "Көлік пен жылжымайтын мүлікті сату практикаларын Телеграм ботта белсендіріңіз" },
+5: { title: "Оқу мен Өзгерістер энергиясы", desc: "Рухани немесе зияткерлік ізденіс жылы. Жаңа білім алу, саяхаттау, дүниетанымды өзгерту немесе басқа адамдармен тәжірибе бөлісу үшін тамаша уақыт. Өзгерістерге сабырлы қараңыз. Болған істің бәрі жақсылыққа.", cta: "Телеграм ботта ақша шақыру мен клиенттерді тарту әдістерін алыңыз" },
+6: { title: "Таңдау мен Махаббат энергиясы", desc: "Сізге  маңызды шешімдерді жүрекпен қабылдау керек болады. Жыл қарым-қатынас, сұлулық пен жайлылық мәселелеріне толы. Отбасылық бизнес ашуға қолайлы.", cta: "Телеграм ботта үйлесімділік пен тілектерді орындау практикаларын алыңыз" },
+7: { title: "Рухани дағдарыс пен Трансформация энергиясы", desc: "Рухани дағдарыс, өзіңізді тану және өзіндік талдау жылы. Оңашалануды қалайсыз. Бұл жылы әр қадамды мұқият ойластырып, импульсивті шешімдер қабылдамау керек. Ішкі трансформация жүреді, нәтижесінде өмір өзгереді.", cta: "Телеграм ботта қарыздарды жабуға арналған практикаларды алыңыз" },
+8: { title: "Әділдік пен Карма энергиясы", desc: "Өткен істердің жемісін жинайтын уақыт. Осы жылы болатын нәрселердің бәрі — сіздің бұрынғы шешімдеріңіздің салдары. Әділдік пен адалдықты тексеретін жыл. Инвестиция жасауға мен үй сатып алуға қолайлы. Кез келген күтпеген табыс — бұл сынақ, қайырымдылық жасап? мұқтаж адамдарға көмектесу керек.", cta: "Көлік пен жылжымайтын мүлікті сату практикаларын Телеграм ботта белсендіріңіз" },
+9: { title: "Даналық пен Аяқтау энергиясы", desc: "Терең өзін-өзі тану және қорытынды жасау жылы. Өткенге жабыспай, басталған және аяқталмаған істерді аяқтау маңызды. Қарыздарды қайтарып, несиелерді жабу қажет. Әйтпесе, барлық аяқталмаған істер келесі 8 жылға созылуы мүмкін.", cta: "Телеграм ботта қарыздарды жабуға арналған практикаларды алыңыз" }
+}
+};
+let currentLang = 'ru';
+function setLanguage(lang) {
+currentLang = lang;
+document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+event.target.classList.add('active');
+document.getElementById('main-title').innerText = i18n[lang].title;
+document.getElementById('method-text').innerText = i18n[lang].method;
+document.getElementById('lbl-date').innerText = i18n[lang].lblDate;
+document.getElementById('lbl-year').innerText = i18n[lang].lblYear;
+document.getElementById('btn-submit').innerText = i18n[lang].btnSubmit;
+document.getElementById('res-bot-link').innerText = i18n[lang].botText;
+document.getElementById('res-bot-link').href = i18n[lang].botUrl;
+const resBox = document.getElementById('result');
+if (resBox.style.display === 'block') {
+const currentNum = document.getElementById('res-num').innerText;
+if (interpretations[lang][currentNum]) {
+document.getElementById('res-title').innerText = interpretations[lang][currentNum].title;
+document.getElementById('res-desc').innerText = interpretations[lang][currentNum].desc;
+document.getElementById('res-cta').innerText = interpretations[lang][currentNum].cta;
+}
+}
+}
+    function calculateEnergy() {
+        const dateInput = document.getElementById('birthdate').value;
+        const yearInput = document.getElementById('targetyear').value;
+        const errorText = document.getElementById('error-text');
+        const resBox = document.getElementById('result');
+
+        if (!dateInput || !yearInput) {
+            errorText.innerText = i18n[currentLang].errorEmpty;
+            errorText.style.display = 'block';
+            resBox.style.display = 'none';
+            return;
+        }
+
+        errorText.style.display = 'none';
+
+        const birthDate = new Date(dateInput);
+        const day = birthDate.getDate();
+        const month = birthDate.getMonth() + 1; // В JS месяцы от 0 до 11
+        const targetYear = parseInt(yearInput);
+
+        // ====== УМНАЯ ЛОГИКА СОЛЯРНОГО ГОДА ======
+        // Создаем дату рождения в интересующем пользователя году
+        const birthdayInTargetYear = new Date(targetYear, month - 1, day);
+        
+        // Создаем текущую дату (когда пользователь нажал кнопку прямо сейчас)
+        const today = new Date();
+        
+        let calculatedSolarYear = targetYear;
+
+        // Если пользователь делает прогноз на ТЕКУЩИЙ календарный год:
+        if (targetYear === today.getFullYear()) {
+            // Если его день рождения в этом году ЕЩЕ НЕ НАСТУПИЛ, то его солярный год равен прошлому году
+            if (today < birthdayInTargetYear) {
+                calculatedSolarYear = targetYear - 1;
+            }
+        } 
+        // Если пользователь делает прогноз на БУДУЩИЙ год (например, на январь следующего года):
+        else if (targetYear > today.getFullYear()) {
+            // Мы предполагаем базовый солярный сдвиг для начала того года, пока не наступил день рождения
+            // (В нумерологии, если смотрят январь-февраль будущего года до ДР, берут прошлый соляр)
+            calculatedSolarYear = targetYear - 1;
+        }
+
+        // Функция приведения числа к однозначному (от 1 до 9)
+        function reduceToSingleDigit(num) {
+            while (num > 9) {
+                num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+            }
+            return num;
+        }
+
+        // Расчет по солярному году: День + Месяц + Правильный солярный год
+        const sum = day + month + calculatedSolarYear;
+        const finalEnergy = reduceToSingleDigit(sum);
+
+        // Вывод результатов на экран
+        document.getElementById('res-num').innerText = finalEnergy;
+        document.getElementById('res-title').innerText = interpretations[currentLang][finalEnergy].title;
+        document.getElementById('res-desc').innerText = interpretations[currentLang][finalEnergy].desc;
+        document.getElementById('res-cta').innerText = interpretations[currentLang][finalEnergy].cta;
+
+        resBox.style.display = 'block';
+        resBox.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
